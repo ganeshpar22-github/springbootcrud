@@ -1,9 +1,11 @@
 package com.springbootcrud.springbootbackend.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.springbootcrud.springbootbackend.exception.ResourceNotFoundException;
 import com.springbootcrud.springbootbackend.model.Employee;
 import com.springbootcrud.springbootbackend.repository.EmployeeRepository;
 import com.springbootcrud.springbootbackend.service.EmployeeService;
@@ -33,6 +35,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> getAllEmployees() {
 		
 		return employeeRepository.findAll();
+	}
+
+
+
+	@Override
+	public Employee getEmployeeById(long id) {
+		Optional<Employee> employee = employeeRepository.findById(id);
+		if(employee.isPresent()) {
+			return employee.get();
+		}
+		else {
+			throw new ResourceNotFoundException("Employee", "Id", id);
+		}
+		
+		
+		//instead of above if-else we can also use lambda expression
+		
+//		return employeeRepository.findById(id).orElseThrow(()->
+//		new ResourceNotFoundException("Employee", "Id", id));
+		
 	}
 
 	
